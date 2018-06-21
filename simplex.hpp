@@ -11,14 +11,17 @@ template<class T>
 class solution{
 	public:
 	T Z;
-	vector<T> Xi;
+	vector<T> X;
 };
 
 template<class T>
 class simplex{
 	public:
+
 	static opt<solution<T>> solve(tableau<T> tab){
 		//algorithm goes here
+		//Selecionar variavel que entra na base
+		//realizar elimminação de gauss
 		tab.print();
 	};
 };

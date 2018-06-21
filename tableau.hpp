@@ -24,6 +24,7 @@ class tableau{
 		auto const columns = Z.size() + A.size() + 2;
 		auto const lines = A.size() + 1;
 
+		cout<< "Linha: " << lines << "\t Coluna: " << columns << endl;
 		//fill tableau with 0's
 		data = vector<vector<N>>(lines);
 		for(auto& line : data)
@@ -37,7 +38,7 @@ class tableau{
 		}
 
 		//A
-		for(size_t line = 1; line < Z.size()+1; ++line){
+		for(size_t line = 1; line < A.size()+1; ++line){
 			for(size_t column = 1; column < Z.size()+1; ++column){
 				data[line][column] = A[line-1][column-1];
 			}
@@ -69,6 +70,5 @@ class tableau{
 
 	//TODO: alterar para permitir simplex de duas fases
 	//TODO: add caso para restrições <=, = e >=. Aka var auxiliar
-	//TODO: testar para casos aonde numero de restrições é diferente do numero de variáveis de decisão
 	//TODO: aonde no tableau entra as restrições de nulidade/lowerBound?
 };
