@@ -78,6 +78,20 @@ class simplex{
 		else return {};
 	}
 	public:
+
+
+	void gaussElimination(size_t linePivot, size_t columnPivot){
+		auto pivot = tab[linePivot][columnPivot];
+		for(size_t line = 0; line < tab.getLines(); ++line){
+			auto pivotLine = tab[line][columnPivot];
+			for(size_t column = 1; column < tab.getColumns(); ++column){
+				if(line == linePivot)
+					tab[line][column] /= pivotLine;
+				else
+					tab[line][column] = -pivotLine*tab[linePivot][column]/pivot+tab[line][column];
+			}
+		}
+	}
 	simplex(tableau<T> tableau):tab(tableau){};
 
 	opt<solution<T>> solve(){
@@ -90,8 +104,12 @@ class simplex{
 			for(const auto& i: tmp.value())
 		cout << std::get<0>(i) << "\t";
 		*/
-		cout << indexEnterVar().value() << endl;
-		cout << indexExitVar(indexEnterVar().value()).value() << endl;
+		auto e = indexEnterVar().value();
+		auto s = indexExitVar(e).value();
+
+		gaussElimination(s,e);
+		cout<< endl << endl << endl;
+		tab.print();
 		return{};
 	};
 };
