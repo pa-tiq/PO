@@ -4,6 +4,7 @@
 #include <vector>
 #include <tuple>
 #include <iostream>
+#include <limits>
 
 template<class T>
 using opt = std::optional<T>;
@@ -31,7 +32,7 @@ class simplex{
 		if(ret.empty()) return {};
 		else return ret;
 	}
-	opt<size_t>  indexEnteringVar(){
+	opt<size_t>  indexEnterVar(){
 		T smallest = T();
 		size_t indexSmallest;
 		bool valid = false;
@@ -43,6 +44,36 @@ class simplex{
 					indexSmallest = index;
 				}
 			}
+		else return {};
+		if(valid) return indexSmallest;
+		else return {};
+	}
+
+	opt<vector<tuple<T, size_t>>> getRatios(T indexEnterVar){
+		vector<tuple<T, size_t>> ret;
+		auto column = tab.getColumns()-1;
+		for(size_t i = 1; i < tab.getLines(); ++i ){
+			if(tab[i][column] > 0){ // TODO: válido apenas para maximizar, depois fazer alerações para minimização
+				ret.push_back(tuple<T,size_t>(tab[i][column]/tab[i][indexEnterVar], i));
+			}
+		}
+		if(ret.empty()) return {};
+		else return ret;
+	}
+
+	opt<size_t> indexExitVar(T indexEnterVar){
+		T smallest = std::numeric_limits<T>::max();
+		size_t indexSmallest;
+		bool valid = false;
+		if(const auto& vec = getRatios(indexEnterVar))
+			for(const auto& [val, index] : vec.value()){
+				if(val < smallest && val > 0){ // TODO,: Depois alterar para minimização
+					valid = true;
+					smallest = val;
+					indexSmallest = index;
+				}
+			}
+		else return {};
 		if(valid) return indexSmallest;
 		else return {};
 	}
@@ -59,7 +90,8 @@ class simplex{
 			for(const auto& i: tmp.value())
 		cout << std::get<0>(i) << "\t";
 		*/
-		cout << indexEnteringVar().value() << endl;
+		cout << indexEnterVar().value() << endl;
+		cout << indexExitVar(indexEnterVar().value()).value() << endl;
 		return{};
 	};
 };
