@@ -7,12 +7,18 @@ int main(){
 					{
 						{1, 1, 1},
 						{2, 1, -1},
-						{3, 2, -1},
 						{3, 2, -1}
 					},
-					{40,20,30,10},
-					false
+					{40,20,30}
 					);
 	t.print();
+	simplex<float> s(t);
+	s.solve();
+	/*
+	auto tmp = t.baseVars();
+	for(const auto& i: tmp)
+		cout << i << "\t";
+	cout << endl;
+	*/
 	return 0;
 };

@@ -11,20 +11,23 @@ template<class N = float>
 class tableau{
 	vector<vector<N>> data;
 	const bool maximize;
+	vector<size_t> indexBaseVars;
+	size_t columns;
+	size_t lines;
 	public:
 	tableau(vector<N> Z, //Z são as constantes da função objetiva
 			vector<vector<N>> A, //A são as constantes da  matriz de restrições
 			vector<N> b, //b é o lado direito das restrições
 			//vector<T4> lowerBound,
 			bool max = true
-			) :maximize(max){
+			) : maximize(max){
+
 		//primeiramente testarei se as dimensões são válidas
 		if( A.size() != b.size()) throw;
 
-		auto const columns = Z.size() + A.size() + 2;
-		auto const lines = A.size() + 1;
+		columns = Z.size() + A.size() + 2;
+		lines = A.size() + 1;
 
-		cout<< "Linha: " << lines << "\t Coluna: " << columns << endl;
 		//fill tableau with 0's
 		data = vector<vector<N>>(lines);
 		for(auto& line : data)
@@ -53,9 +56,14 @@ class tableau{
 		for(size_t i = 1; i < b.size()+1; ++i){
 			data[i][columns-1] = b[i-1];
 		}
+
+		//
+		for(size_t i = Z.size() + 1; i < columns-1; ++i){
+			indexBaseVars.push_back(i);
+		}
 	}
 
-	tableau() {
+	tableau():maximize(true){
 	}
 
 	void print(){
@@ -67,6 +75,13 @@ class tableau{
 	};
 
 	vector<N>& operator[](const size_t i){ return data[i]; }
+
+	vector<size_t> baseVars() const {
+		return indexBaseVars;
+	}
+
+	size_t getColumns(){ return columns; }
+	size_t getLines(){ return lines; }
 
 	//TODO: alterar para permitir simplex de duas fases
 	//TODO: add caso para restrições <=, = e >=. Aka var auxiliar
