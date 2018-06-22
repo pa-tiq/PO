@@ -80,6 +80,12 @@ class tableau{
 		return indexBaseVars;
 	}
 
+	void setBaseVar(size_t in, size_t out){
+		for(auto& i: indexBaseVars)
+			if(i == in )
+				i = out;
+	};
+
 	size_t getColumns(){ return columns; }
 	size_t getLines(){ return lines; }
 

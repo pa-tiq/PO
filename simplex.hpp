@@ -44,7 +44,6 @@ class simplex{
 					indexSmallest = index;
 				}
 			}
-		else return {};
 		if(valid) return indexSmallest;
 		else return {};
 	}
@@ -73,7 +72,6 @@ class simplex{
 					indexSmallest = index;
 				}
 			}
-		else return {};
 		if(valid) return indexSmallest;
 		else return {};
 	}
@@ -95,21 +93,28 @@ class simplex{
 	simplex(tableau<T> tableau):tab(tableau){};
 
 	opt<solution<T>> solve(){
-		//algorithm goes here
-		//Selecionar variavel que entra na base
-		//Variável básica -> var identidade
-		//realizar elimminação de gauss
-		/*
-		if(auto tmp = getCoefs())
-			for(const auto& i: tmp.value())
-		cout << std::get<0>(i) << "\t";
-		*/
-		auto e = indexEnterVar().value();
-		auto s = indexExitVar(e).value();
 
-		gaussElimination(s,e);
-		cout<< endl << endl << endl;
-		tab.print();
+		while(indexEnterVar()){
+			auto in = indexEnterVar().value();
+			auto out = indexExitVar(in).value();
+			gaussElimination(out, in);
+			/*TODO: está errado
+			*
+			* Out é indice da linha da variável que está na base( na eliminação de gauss);
+			* porém deve ser adicionado à base é o indice da coluna
+			*
+			*/
+			//debug
+			tab.setBaseVar(in, out);
+			cout << "in:" << in << "\tout:" << out << endl;
+			for(const auto& i : tab.baseVars())
+				cout << i << "\t";
+			cout << "\n\n\n\n";
+			tab.print();
+		}
+		//end debug
+		//TODO: Critério de parada
+		//TODO: construir classe solution
 		return{};
 	};
 };
