@@ -11,14 +11,7 @@ int main(){
 					},
 					{40,20,30}
 					);
-	t.print();
 	simplex<float> s(t);
-	s.solve();
-	/*
-	auto tmp = t.baseVars();
-	for(const auto& i: tmp)
-		cout << i << "\t";
-	cout << endl;
-	*/
+	s.solve().value().print();
 	return 0;
 };

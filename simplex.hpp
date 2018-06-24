@@ -17,6 +17,22 @@ class solution{
 	public:
 	T Z;
 	vector<T> X;
+	solution(T z, vector<T>x):Z(z), X(x){}
+	void print(){
+		cout << "Z* = " << Z << "\t\n";
+		for(size_t i = 0; i < X.size(); ++ i)
+			cout << "X" << i+1 << "=" <<  X.at(i) <<";\t\t\t";
+		cout << endl;
+	}
+	solution(tableau<T> tab){
+		X = vector<T>(tab.getDecisionVars().size());
+		Z = tab[0][tab.getColumns()-1];
+		for(size_t i = 1; i < X.size()+1; ++i){
+			if(tab.isBase(i)){
+				X.at(i-1) = tab[tab.getLineIndexBaseVar(i).value()][tab.getColumns()-1];
+			}
+		}
+	}
 };
 
 template<class T>
@@ -66,7 +82,7 @@ class simplex{
 		bool valid = false;
 		if(const auto& vec = getRatios(indexEnterVar))
 			for(const auto& [val, index] : vec.value()){
-				if(val < smallest && val > 0){ // TODO,: Depois alterar para minimização
+				if(val < smallest && val > 0){ // TODO: Depois alterar para minimização
 					valid = true;
 					smallest = val;
 					indexSmallest = index;
@@ -80,13 +96,12 @@ class simplex{
 
 	void gaussElimination(size_t linePivot, size_t columnPivot){
 		auto pivot = tab[linePivot][columnPivot];
+		for(auto& i : tab[linePivot]) i /= pivot;
 		for(size_t line = 0; line < tab.getLines(); ++line){
 			auto pivotLine = tab[line][columnPivot];
 			for(size_t column = 1; column < tab.getColumns(); ++column){
-				if(line == linePivot)
-					tab[line][column] /= pivotLine;
-				else
-					tab[line][column] = -pivotLine*tab[linePivot][column]/pivot+tab[line][column];
+				if(line != linePivot)
+					tab[line][column] -= pivotLine*tab[linePivot][column];
 			}
 		}
 	}
@@ -99,16 +114,15 @@ class simplex{
 			auto out = indexExitVar(in).value();
 			gaussElimination(out, in);
 			tab.setBaseVar(in, out);
-			//debug
+			/*debug
 			cout << "in(col):" << in << "\tout(line):" << out << endl;
 			for(const auto& [line, column] : tab.baseVars())
 				cout << "line: " << line << "\t" << "column: " << column << endl;
 			cout << "\n\n\n\n";
 			tab.print();
-			//end debug
+			*/
 		}
 		//TODO: Critério de parada
-		//TODO: construir classe solution
-		return{};
+		return solution<T>(tab);
 	};
 };

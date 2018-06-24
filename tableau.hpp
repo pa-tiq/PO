@@ -2,11 +2,14 @@
 #include <vector>
 #include <iostream>
 #include <tuple>
+#include <optional>
 
 using std::vector;
 using std::cout;
 using std::endl;
 using pos = std::tuple<size_t, size_t>;
+template <class T>
+using opt = std::optional<T>;
 
 template<class N = float>
 //N é o tipo númerico.
@@ -17,13 +20,14 @@ class tableau{
 
 	size_t columns;
 	size_t lines;
+	vector<N> z;
 	public:
 	tableau(vector<N> Z, //Z são as constantes da função objetiva
 			vector<vector<N>> A, //A são as constantes da  matriz de restrições
 			vector<N> b, //b é o lado direito das restrições
 			//vector<T4> lowerBound,
 			bool max = true
-			) : maximize(max){
+			) : maximize(max), z(Z){
 
 		//primeiramente testarei se as dimensões são válidas
 		if( A.size() != b.size()) throw;
@@ -97,8 +101,21 @@ class tableau{
 			}
 	};
 
+	opt<size_t> getLineIndexBaseVar(size_t column){
+		for(auto& [line, col]: indexBaseVars)
+			if( col == column ) return line;
+		return {};
+	}
+
 	size_t getColumns(){ return columns; }
 	size_t getLines(){ return lines; }
+	vector<N> getDecisionVars(){ return z; }
+	bool isBase(size_t columnIndex){
+		for(auto& [line, column]: indexBaseVars)
+			if( column == columnIndex)
+				return true;
+		return false;
+	}
 
 	//TODO: alterar para permitir simplex de duas fases
 	//TODO: add caso para restrições <=, = e >=. Aka var auxiliar
