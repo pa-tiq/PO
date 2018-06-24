@@ -1,17 +1,20 @@
 #pragma once
 #include <vector>
 #include <iostream>
+#include <tuple>
 
 using std::vector;
 using std::cout;
 using std::endl;
+using pos = std::tuple<size_t, size_t>;
 
 template<class N = float>
 //N é o tipo númerico.
 class tableau{
 	vector<vector<N>> data;
 	const bool maximize;
-	vector<size_t> indexBaseVars;
+	vector<pos> indexBaseVars; // primeiro elemento é linha, segundo é coluna
+
 	size_t columns;
 	size_t lines;
 	public:
@@ -58,8 +61,9 @@ class tableau{
 		}
 
 		//
-		for(size_t i = Z.size() + 1; i < columns-1; ++i){
-			indexBaseVars.push_back(i);
+		size_t line = 1;
+		for(size_t i = Z.size() + 1; i < columns-1; ++i, ++line){
+			indexBaseVars.push_back(pos(line, i));
 		}
 	}
 
@@ -76,14 +80,21 @@ class tableau{
 
 	vector<N>& operator[](const size_t i){ return data[i]; }
 
-	vector<size_t> baseVars() const {
+	/*vector<size_t> baseVars() const {
+		vector<size_t> ret;
+		for(auto [line, column]: indexBaseVars)
+			ret.push_back(column);
+		return ret;
+	}*/
+	vector<pos> baseVars() const {
 		return indexBaseVars;
 	}
 
 	void setBaseVar(size_t in, size_t out){
-		for(auto& i: indexBaseVars)
-			if(i == in )
-				i = out;
+		for(auto& [line, column]: indexBaseVars)
+			if(line == out ){
+				column = in;
+			}
 	};
 
 	size_t getColumns(){ return columns; }

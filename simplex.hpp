@@ -98,21 +98,15 @@ class simplex{
 			auto in = indexEnterVar().value();
 			auto out = indexExitVar(in).value();
 			gaussElimination(out, in);
-			/*TODO: está errado
-			*
-			* Out é indice da linha da variável que está na base( na eliminação de gauss);
-			* porém deve ser adicionado à base é o indice da coluna
-			*
-			*/
-			//debug
 			tab.setBaseVar(in, out);
-			cout << "in:" << in << "\tout:" << out << endl;
-			for(const auto& i : tab.baseVars())
-				cout << i << "\t";
+			//debug
+			cout << "in(col):" << in << "\tout(line):" << out << endl;
+			for(const auto& [line, column] : tab.baseVars())
+				cout << "line: " << line << "\t" << "column: " << column << endl;
 			cout << "\n\n\n\n";
 			tab.print();
+			//end debug
 		}
-		//end debug
 		//TODO: Critério de parada
 		//TODO: construir classe solution
 		return{};
