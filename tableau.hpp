@@ -14,7 +14,7 @@ using opt = std::optional<T>;
 template<class N = float>
 //N é o tipo númerico.
 class tableau{
-	protected:
+	public:
 	vector<vector<N>> data;
 	bool maximize;
 	vector<pos> indexBaseVars; // primeiro elemento é linha, segundo é coluna
@@ -22,7 +22,6 @@ class tableau{
 	size_t columns;
 	size_t lines;
 	vector<N> z;
-	public:
 	tableau(vector<N> Z, //Z são as constantes da função objetiva
 			vector<vector<N>> A, //A são as constantes da  matriz de restrições
 			vector<N> b, //b é o lado direito das restrições

@@ -10,6 +10,7 @@ enum class comp{ //comparison
 template <class M>
 class tableau2: public tableau<M>{
 	using super = tableau<M>;
+	vector<comp> comparison;
 
 	template <comp lhs>
 	static size_t numberComp(const vector<comp>& comparison){
@@ -36,7 +37,7 @@ class tableau2: public tableau<M>{
 				vector<M> b,
 				vector<comp> comparison,
 				bool max = true
-			){
+			):comparison(comparison){
 		super::maximize = max;
 		super::z = Z;
 
@@ -99,8 +100,48 @@ class tableau2: public tableau<M>{
 		}
 
 		//Zart
+		super::data[0][0] = -1;
+		for(size_t col = 1; col < Z.size()+numberSlacks(comparison)+1; ++col){
+			for(size_t line = 2; line < super::lines; line++){
+				const auto& thisLineComparison = comparison[line-2];
+				if(thisLineComparison != comp::lessOrEqual){
+					super::data[0][col] -= super::data[line][col];
+				}
+			}
+		}
+		for(size_t line = 2; line < super::lines; line++){
+			const auto& thisLineComparison = comparison[line-2];
+			if(thisLineComparison != comp::lessOrEqual){
+				super::data[0].back() += super::data[line].back();
+			}
+		}
+		super::data[0].back() = -super::data[0].back();
+		/*
 		for(auto& [line, column] : super::baseVars())
 			cout << "line:" << line << "\t column:" << column << endl;
 		super::print();
+		*/
+	}
+
+	tableau<M> get2fase(){
+		//remove 1°line
+		tableau<M> ret= *this;
+		for(size_t line = 0; line < super::lines-1; ++line){
+			ret.data[line] = ret.data[line+1];
+		}
+		ret.data.pop_back();
+		for(size_t line = 0; line < super::lines; ++line){
+			ret.data[line][ret.data[0].size()-numberAuxVars(comparison)-1] = ret.data[line].back();
+		}
+		for(size_t line = 0; line < super::lines; ++line){
+			for(size_t i = 0; i < numberAuxVars(comparison);++i)
+				ret.data[line].pop_back();
+		}
+		for(auto& [line, column]: ret.indexBaseVars)
+			line -= 1;
+
+		ret.lines = ret.data.size();
+		ret.columns = ret.data[0].size();
+		return ret;
 	}
 };
