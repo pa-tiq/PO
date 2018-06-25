@@ -41,7 +41,7 @@ class simplex{
 	opt<vector<tuple<T, size_t>>> getCoefs(){
 		vector<tuple<T, size_t>> ret;
 		for(size_t i = 1; i < tab.getColumns()-1; ++i ){
-			if(tab[0][i] < 0){ // TODO: válido apenas para maximizar, depois fazer alerações para minimização
+			if(tab[0][i] < 0){
 				ret.push_back(tuple<T,size_t>(tab[0][i], i));
 			}
 		}
@@ -54,7 +54,7 @@ class simplex{
 		bool valid = false;
 		if(const auto& vec = getCoefs())
 			for(const auto& [val, index] : vec.value()){
-				if(val < smallest && val < 0){ // TODO,: Depois alterar para minimização
+				if(val < smallest && val < 0){
 					valid = true;
 					smallest = val;
 					indexSmallest = index;
@@ -68,7 +68,7 @@ class simplex{
 		vector<tuple<T, size_t>> ret;
 		auto column = tab.getColumns()-1;
 		for(size_t i = 1; i < tab.getLines(); ++i ){
-			if(tab[i][column] > 0){ // TODO: válido apenas para maximizar, depois fazer alerações para minimização
+			if(tab[i][column] > 0){
 				ret.push_back(tuple<T,size_t>(tab[i][column]/tab[i][indexEnterVar], i));
 			}
 		}
@@ -82,7 +82,7 @@ class simplex{
 		bool valid = false;
 		if(const auto& vec = getRatios(indexEnterVar))
 			for(const auto& [val, index] : vec.value()){
-				if(val < smallest && val > 0){ // TODO: Depois alterar para minimização
+				if(val < smallest && val > 0){
 					valid = true;
 					smallest = val;
 					indexSmallest = index;

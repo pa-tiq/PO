@@ -14,8 +14,9 @@ using opt = std::optional<T>;
 template<class N = float>
 //N é o tipo númerico.
 class tableau{
+	protected:
 	vector<vector<N>> data;
-	const bool maximize;
+	bool maximize;
 	vector<pos> indexBaseVars; // primeiro elemento é linha, segundo é coluna
 
 	size_t columns;
@@ -44,7 +45,7 @@ class tableau{
 		//Z
 		data[0][0] = maximize ? 1 : -1;
 		for(size_t i  = 1; i < Z.size()+1; ++i){
-			data[0][i] = (maximize ? -1 : 1)*Z[i-1];
+			data[0][i] = (maximize ? 1 : -1)*Z[i-1];
 		}
 
 		//A
@@ -117,6 +118,7 @@ class tableau{
 		return false;
 	}
 
+	//virtual ~tableau();
 	//TODO: alterar para permitir simplex de duas fases
 	//TODO: add caso para restrições <=, = e >=. Aka var auxiliar
 	//TODO: aonde no tableau entra as restrições de nulidade/lowerBound?
