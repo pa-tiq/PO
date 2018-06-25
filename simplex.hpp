@@ -138,7 +138,7 @@ class simplex{
 					cout << "\n\n\n\n";
 			*/
 		}
-		return tuple(tab, solution<T>(tab));
+		return tuple(tab, solution(tab));
 	}
 
 	static opt<tuple<tableau<T>, solution<T>>> solve(tableau2<T> tab){

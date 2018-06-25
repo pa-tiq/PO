@@ -4,13 +4,14 @@
 #include "simplex.hpp"
 
 int main(){
-	tableau<float> t({2, 3, 1},
+	tableau2<double> t1({2, 3, 1},
 					{
 						{1, 1, 1},
 						{2, 1, -1},
 						{3, 2, -1},
 					},
-					{40,20,30}
+					{40,20,30},
+					{comp::lessOrEqual, comp::lessOrEqual, comp::lessOrEqual}
 					);
 	tableau2<double> t2({1, 1, 1},
 					{
@@ -40,9 +41,10 @@ int main(){
 					{comp::lessOrEqual, comp::equal, comp::greaterOrequal},
 					false
 					);
-	if(auto tmp = simplex<double>::solve(t4)){
+
+	if(auto tmp = simplex<double>::solve(t1)){
 		auto [tab, sol] = tmp.value();
 		sol.print();
-	} else cout << "Solução artificial é inválida\n";
+	} else cout << "Problema sem solução\n";
 	return 0;
 };
