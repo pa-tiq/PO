@@ -4,6 +4,9 @@
 #include "simplex.hpp"
 #include "stdafx.h"
 
+template<class T>
+opt<tuple<tableau2<T>, solution<T>>> branchAndBound(tableau2<T> tableau);
+double optimalSolution;
 
 int main(){
 	tableau2<double> t1({2, 3, 1},
@@ -44,19 +47,65 @@ int main(){
 					false
 					);
 
-	try
-	{
-		if (auto tmp = simplex<double>::solve(t1)) {
-			auto[tab, sol] = tmp.value();
-			sol.print();
-		}
-		else cout << "Problema sem solucao\n";
-	}
-	catch (int e)
-	{
-		cout << "Excecao Nr. " << e << endl;
-	}
+	optimalSolution = 0.0;
+	branchAndBound(t4);
 
 	system("pause");
-	return 0;
+	return 0;	
 };
+
+template<class T>
+opt<tuple<tableau2<T>, solution<T>>> branchAndBound(tableau2<T> tableau)
+{
+	bool branched = false;
+	double intpart;
+	double decimalpart;
+	tableau2<T> copyTableau = tableau;
+
+	if (auto tmp = simplex<double>::solve(tableau))
+	{
+		auto[tab, sol] = tmp.value();
+		sol.print();
+
+		if (tableau.maximize)
+		{
+			if (sol.Z < optimalSolution) return {};
+			else optimalSolution = sol.Z;
+		}
+		else
+		{
+			if (sol.Z > optimalSolution) return {};
+			else optimalSolution = sol.Z;
+		}
+
+		for (int i = 0; i < sol.X.size(); i++)
+		{
+			if ((int)sol.X[i] == 0) continue;
+			
+			decimalpart = std::modf(sol.X[i], &intpart);
+
+			if (decimalpart > 0.0001)
+			{
+				branched = true;
+				cout << endl;
+
+				copyTableau.addRestriction(i, comp::lessOrEqual, intpart);
+				auto ltmp = branchAndBound(copyTableau);
+
+				copyTableau = tableau;
+
+				copyTableau.addRestriction(i, comp::greaterOrequal, intpart + 1);
+				auto rtmp = branchAndBound(copyTableau);
+			}
+		}
+
+		if (!branched && sol.Z == optimalSolution)
+		{
+			cout << "\n\nSOLUCAO OTIMA ENCONTRADA!\n\n";
+			return tmp;			
+		}
+			
+
+	}
+	else return {};
+}

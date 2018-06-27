@@ -125,7 +125,7 @@ class simplex{
 		return tuple(tab, solution<T>(tab));
 	}
 
-	static opt<tuple<tableau<T>, solution<T>>> solve(tableau<T> tab){
+	static opt<tuple<tableau2<T>, solution<T>>> solve2(tableau2<T> tab){
 		while(indexEnterVar(tab)){
 			auto in = indexEnterVar(tab).value();
 			auto out = indexExitVar(tab, in).value();
@@ -141,7 +141,7 @@ class simplex{
 		return tuple(tab, solution(tab));
 	}
 
-	static opt<tuple<tableau<T>, solution<T>>> solve(tableau2<T> tab){
+	static opt<tuple<tableau2<T>, solution<T>>> solve(tableau2<T> tab){
 		if(auto tup = simplex<T>::solveFirst(tab)){
 			auto [tab2, sol2] = tup.value();
 
@@ -151,14 +151,14 @@ class simplex{
 					return {};
 			}
 
-			tableau<T> test = tab2.get2fase();
+			tableau2<T> test = tab2.get2fase();
 			/*
 			cout << "Solução da primeira fase está concluída, fazendo segunda fase" << endl;
 			for(const auto& [line, column] : test.baseVars())
 				cout << "line: " << line << "\t" << "column: " << column << endl;
 			test.print();
 			*/
-			return simplex<T>::solve(test);
+			return simplex<T>::solve2(test);
 		} else return {};
 	}
 };

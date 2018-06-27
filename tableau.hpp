@@ -22,6 +22,7 @@ class tableau{
 	size_t columns;
 	size_t lines;
 	vector<N> z;
+
 	tableau(vector<N> Z, //Z são as constantes da função objetiva
 			vector<vector<N>> A, //A são as constantes da  matriz de restrições
 			vector<N> b, //b é o lado direito das restrições

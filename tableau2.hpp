@@ -123,9 +123,9 @@ class tableau2: public tableau<M>{
 		*/
 	}
 
-	tableau<M> get2fase(){
+	tableau2<M> get2fase(){
 		//remove 1°line
-		tableau<M> ret= *this;
+		tableau2<M> ret= *this;
 		for(size_t line = 0; line < super::lines-1; ++line){
 			ret.data[line] = ret.data[line+1];
 		}		
@@ -143,5 +143,16 @@ class tableau2: public tableau<M>{
 		ret.lines = ret.data.size();
 		ret.columns = ret.data[0].size();
 		return ret;
+	}
+
+	void addRestriction(int index, comp opr, int rightSide)
+	{
+		this->comparison.push_back(opr);
+
+		vector<M> newRestriction(this->data[0].size());
+		newRestriction[index + 1] = 1.0;
+		newRestriction[this->data[0].size()- 1] = rightSide;
+
+		this->data.push_back(newRestriction);
 	}
 };
