@@ -2,6 +2,8 @@
 #include "tableau.hpp"
 #include "tableau2.hpp"
 #include "simplex.hpp"
+#include "stdafx.h"
+
 
 int main(){
 	tableau2<double> t1({2, 3, 1},
