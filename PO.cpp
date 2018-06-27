@@ -6,7 +6,9 @@
 
 template<class T>
 opt<tuple<tableau2<T>, solution<T>>> branchAndBound(tableau2<T> tableau);
+
 double optimalSolution;
+bool foundOptimalSolution;
 
 int main(){
 	tableau2<double> t1({2, 3, 1},
@@ -48,7 +50,9 @@ int main(){
 					);
 
 	optimalSolution = 0.0;
-	branchAndBound(t4);
+	foundOptimalSolution = false;
+
+	branchAndBound(t2);
 
 	system("pause");
 	return 0;	
@@ -57,6 +61,8 @@ int main(){
 template<class T>
 opt<tuple<tableau2<T>, solution<T>>> branchAndBound(tableau2<T> tableau)
 {
+	if (foundOptimalSolution) return {};
+
 	bool branched = false;
 	double intpart;
 	double decimalpart;
@@ -87,7 +93,6 @@ opt<tuple<tableau2<T>, solution<T>>> branchAndBound(tableau2<T> tableau)
 			if (decimalpart > 0.0001)
 			{
 				branched = true;
-				cout << endl;
 
 				copyTableau.addRestriction(i, comp::lessOrEqual, intpart);
 				auto ltmp = branchAndBound(copyTableau);
@@ -99,12 +104,14 @@ opt<tuple<tableau2<T>, solution<T>>> branchAndBound(tableau2<T> tableau)
 			}
 		}
 
-		if (!branched && sol.Z == optimalSolution)
+		if (((tableau.maximize && sol.Z >= optimalSolution) || (!tableau.maximize && sol.Z <= optimalSolution)) && !foundOptimalSolution)
 		{
-			cout << "\n\nSOLUCAO OTIMA ENCONTRADA!\n\n";
-			return tmp;			
+			optimalSolution = sol.Z;
+			cout << "\nSOLUCAO OTIMA ENCONTRADA: Z = " << optimalSolution<<"\n";
+			foundOptimalSolution = true;
 		}
-			
+
+		return tmp;			
 
 	}
 	else return {};

@@ -154,5 +154,6 @@ class tableau2: public tableau<M>{
 		newRestriction[this->data[0].size()- 1] = rightSide;
 
 		this->data.push_back(newRestriction);
+		this->lines++;
 	}
 };
