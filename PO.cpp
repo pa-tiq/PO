@@ -44,9 +44,19 @@ int main(){
 					false
 					);
 
-	if(auto tmp = simplex<double>::solve(t1)){
-		auto [tab, sol] = tmp.value();
-		sol.print();
-	} else cout << "Problema sem solução\n";
+	try
+	{
+		if (auto tmp = simplex<double>::solve(t1)) {
+			auto[tab, sol] = tmp.value();
+			sol.print();
+		}
+		else cout << "Problema sem solucao\n";
+	}
+	catch (int e)
+	{
+		cout << "Excecao Nr. " << e << endl;
+	}
+
+	system("pause");
 	return 0;
 };

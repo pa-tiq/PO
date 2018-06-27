@@ -128,15 +128,15 @@ class tableau2: public tableau<M>{
 		tableau<M> ret= *this;
 		for(size_t line = 0; line < super::lines-1; ++line){
 			ret.data[line] = ret.data[line+1];
-		}
-		ret.data.pop_back();
+		}		
 		for(size_t line = 0; line < super::lines; ++line){
 			ret.data[line][ret.data[0].size()-numberAuxVars(comparison)-1] = ret.data[line].back();
-		}
+		}		
 		for(size_t line = 0; line < super::lines; ++line){
 			for(size_t i = 0; i < numberAuxVars(comparison);++i)
 				ret.data[line].pop_back();
 		}
+		ret.data.pop_back();
 		for(auto& [line, column]: ret.indexBaseVars)
 			line -= 1;
 

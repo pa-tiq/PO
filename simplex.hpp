@@ -147,7 +147,8 @@ class simplex{
 
 			//sol2.Z é a solução do problema articial. Se for diferente de zero, significa que as restriçẽso são inconsistentes
 			if(abs(sol2.Z) > std::numeric_limits<T>::epsilon() ){
-				return {};
+				if(abs(sol2.Z) > 0.001)
+					return {};
 			}
 
 			tableau<T> test = tab2.get2fase();
