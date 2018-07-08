@@ -125,21 +125,21 @@ class simplex{
 		return tuple(tab, solution<T>(tab));
 	}
 
-	static opt<tuple<tableau2<T>, solution<T>>> solve2(tableau2<T> tab){
-		while(indexEnterVar(tab)){
-			auto in = indexEnterVar(tab).value();
-			auto out = indexExitVar(tab, in).value();
-			gaussElimination(tab, out, in);
-			tab.setBaseVar(in, out);
-			/*
-					cout << "in(col):" << in << "\tout(line):" << out << endl;
-					for(const auto& [line, column] : tab.baseVars())
-						cout << "line: " << line << "\t" << "column: " << column << endl;
-					cout << "\n\n\n\n";
-			*/
-		}
-		return tuple(tab, solution(tab));
-	}
+	//static opt<tuple<tableau2<T>, solution<T>>> solve2(tableau2<T> tab){
+	//	while(indexEnterVar(tab)){
+	//		auto in = indexEnterVar(tab).value();
+	//		auto out = indexExitVar(tab, in).value();
+	//		gaussElimination(tab, out, in);
+	//		tab.setBaseVar(in, out);
+	//		/*
+	//				cout << "in(col):" << in << "\tout(line):" << out << endl;
+	//				for(const auto& [line, column] : tab.baseVars())
+	//					cout << "line: " << line << "\t" << "column: " << column << endl;
+	//				cout << "\n\n\n\n";
+	//		*/
+	//	}
+	//	return tuple(tab, solution(tab));
+	//}
 
 	static opt<tuple<tableau2<T>, solution<T>>> solve(tableau2<T> tab){
 		if(auto tup = simplex<T>::solveFirst(tab)){
@@ -158,7 +158,7 @@ class simplex{
 				cout << "line: " << line << "\t" << "column: " << column << endl;
 			test.print();
 			*/
-			return simplex<T>::solve2(test);
+			return simplex<T>::solveFirst(test);
 		} else return {};
 	}
 };

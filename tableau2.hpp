@@ -150,7 +150,7 @@ class tableau2: public tableau<M>{
 		this->comparison.push_back(opr);
 
 		vector<M> newRestriction(this->data[0].size());
-		newRestriction[index + 1] = 1.0;
+		newRestriction[++index] = 1.0;
 		newRestriction[this->data[0].size()- 1] = rightSide;
 
 		this->data.push_back(newRestriction);

@@ -64,21 +64,12 @@ int main(){
 					{ 6,45 },
 					{ comp::lessOrEqual, comp::lessOrEqual }
 	);
-	tableau2<double> t7({ 6, 8 },
-					{
-						{ 6, 7 },
-						{ 0, 1 },
-					},
-					{ 40,2 },
-					{ comp::greaterOrequal, comp::greaterOrequal },
-					false
-	);
 
 
 	optimalSolution = 0.0;
 	foundOptimalSolution = false;
 
-	branchAndBound(t7);
+	branchAndBound(t5);
 
 	system("pause");
 	return 0;	
@@ -120,12 +111,12 @@ opt<tuple<tableau2<T>, solution<T>>> branchAndBound(tableau2<T> tableau)
 			{
 				branched = true;
 
-				copyTableau.addRestriction(i, comp::lessOrEqual, intpart);
+				copyTableau.addRestriction(i, comp::lessOrEqual, (int)intpart);
 				auto ltmp = branchAndBound(copyTableau);
 
 				copyTableau = tableau;
 
-				copyTableau.addRestriction(i, comp::greaterOrequal, intpart + 1);
+				copyTableau.addRestriction(i, comp::greaterOrequal, (int)intpart + 1);
 				auto rtmp = branchAndBound(copyTableau);
 			}
 		}
