@@ -48,11 +48,37 @@ int main(){
 					{comp::lessOrEqual, comp::equal, comp::greaterOrequal},
 					false
 					);
+	tableau2<double> t5({ 1, 4 },
+					{
+						{ -2, 4 },
+						{ 2, 3 },
+					},
+					{ 8,12},
+					{ comp::lessOrEqual, comp::lessOrEqual }
+					);
+	tableau2<double> t6({ 5, 8 },
+					{
+						{ 1, 1 },
+						{ 5, 9 },
+					},
+					{ 6,45 },
+					{ comp::lessOrEqual, comp::lessOrEqual }
+	);
+	tableau2<double> t7({ 6, 8 },
+					{
+						{ 6, 7 },
+						{ 0, 1 },
+					},
+					{ 40,2 },
+					{ comp::greaterOrequal, comp::greaterOrequal },
+					false
+	);
+
 
 	optimalSolution = 0.0;
 	foundOptimalSolution = false;
 
-	branchAndBound(t2);
+	branchAndBound(t7);
 
 	system("pause");
 	return 0;	
